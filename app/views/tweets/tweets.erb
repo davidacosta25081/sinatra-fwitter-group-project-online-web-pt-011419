@@ -3,10 +3,10 @@
   <div class="row">
     <div class="col-sm-4 well">
       <div class="well">
-        <h4>Post a new fweet <%= @user.username.capitalize %></h4>
+        <h4>Welcome, <%= @user.username.capitalize %></h4>
       </div>
       <div class="well">
-
+        <img src="/images/fwitter2.png" class="img-circle" height="65" width="65" alt="Fwitter-Logo">
       </div>
 
     </div>
@@ -17,7 +17,7 @@
           <div class="panel panel-default text-left">
             <div class="panel-body">
               <form method="post" action="/tweets">
-                <p contenteditable="true"><input class="tweet" type="text" name="content" id="content"></p>
+                <p contenteditable="true"><input class="tweet" type="text" name="tweet[content]" id="content"></p>
                 <input type="submit" class="btn btn-primary btn-sm" value="Tweet It!">
               </form>
             </div>

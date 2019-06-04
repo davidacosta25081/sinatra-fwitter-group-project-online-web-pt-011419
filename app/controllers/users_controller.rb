@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 
   get '/signup' do
     if !logged_in?
-      erb :'users/create_user'
+      erb :"users/create_user"
     else
       redirect to '/tweets'
     end
@@ -20,16 +20,20 @@ class UsersController < ApplicationController
 
    get '/login' do
      if !logged_in?
-       erb :'/users/login'
+       erb :"/users/login"
      else
-       redirect "/tweets"
+       redirect '/tweets'
      end
    end
 
-   post '/login' do
-     login(params[:username], params[:password])
-     redirect '/tweets'
-   end
+
+  post '/login' do
+    login(params[:username],params[:password])
+    redirect "/tweets"
+  end
+
+
+
 
    get '/logout' do
        logout!

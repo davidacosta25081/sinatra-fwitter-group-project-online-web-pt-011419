@@ -1,32 +1,35 @@
 class TweetsController < ApplicationController
 
   get '/tweets' do
-    if logged_in?
-      @tweets = Tweet.all
-      @user = current_user
-      erb :'tweets/tweets'
+    if !logged_in?
+      redirect "/login"
     else
-      redirect to '/login'
+      @user = current_user
+      @tweets = Tweet.order("id desc")
+      erb :"/tweets/tweets"
     end
   end
 
   get '/tweets/new' do
     if logged_in?
-      erb :'tweets/new'
+      erb :"tweets/new"
     else
       redirect to '/login'
   end
 end
 
 post '/tweets' do
-    @tweet = Tweet.new(content: params[:content])
-    @tweet.user = current_user
-    if @tweet.save
-      redirect "/tweets/#{@tweet.id}"
-    else
-      redirect "/tweets/new"
+      @tweet = Tweet.new(content: params[:content])
+      @tweet.user = current_user
+
+      unless @tweet.content.empty?
+        @tweet.save
+        redirect "/tweets/#{@tweet.id}"
+
+      else
+        redirect "/tweets/new"
+      end
     end
-  end
 
   get '/tweets/:id' do
     if !logged_in?
@@ -40,38 +43,38 @@ post '/tweets' do
 
   get '/tweets/:id/edit' do
     if !logged_in?
-      redirect "/login"
+      redirect '/login'
     else
       @tweet = Tweet.find(params[:id])
       if @tweet.user = current_user
         @user = current_user
         erb :"/tweets/edit_tweet"
       else
-        redirect "/tweets"
+        redirect '/tweets'
       end
     end
   end
 
   patch '/tweets/:id' do
-    @tweet = Tweet.find_by(id: params[:id])
-    @tweet.content = params[:content]
+    @tweet = Tweet.find(params[:id])
+    @tweet.update(content: params[:content])
     if @tweet.save
-      redirect to "/tweets/#{@tweet.id}"
+      redirect "/tweets/#{@tweet.id}"
     else
-      redirect to "/tweets/#{@tweet.id}/edit"
+      redirect "/tweets/#{@tweet.id}/edit"
     end
   end
 
   delete '/tweets/:id/delete' do
     if !logged_in?
-      redirect "/login"
+      redirect '/login'
     else
       @tweet = Tweet.find(params[:id])
       if @tweet.user != current_user
-        redirect "/tweets"
+        redirect '/tweets'
       else
         @tweet.delete
-        redirect "/tweets"
+        redirect '/tweets'
       end
     end
   end
